@@ -1,0 +1,36 @@
+version: '3'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  auth:
+    build: ./auth
+    environment:
+      PORT: "3000"
+      VIRTUAL_HOST: "auth.local"
+    expose:
+      - "3000"
+
+  profile:
+    build: ./profile
+    environment:
+      PORT: "3001"
+      VIRTUAL_HOST: "profile.local"
+    expose:
+      - "3001"
+
+  proxy:
+    build: ./proxy
+    environment:
+      PORT: "3002"
+      AUTH_SERVICE: "http://auth:3000"
+      VIRTUAL_HOST: "proxy.local"
+    expose:
+      - "3002"
+    depends_on:
+      - auth
