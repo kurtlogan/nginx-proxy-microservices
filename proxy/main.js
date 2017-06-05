@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 
 app.get('/', (req, res) => {
-  fetch(process.env.AUTH_SERVICE).then(() => {
+  fetch('http://auth').then(() => {
     res.send("Auth service via Proxy service reached!")
   })
 })

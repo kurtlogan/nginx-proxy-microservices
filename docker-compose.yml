@@ -11,10 +11,10 @@ services:
   auth:
     build: ./auth
     environment:
-      PORT: "3000"
+      PORT: "80"
       VIRTUAL_HOST: "auth.local"
     expose:
-      - "3000"
+      - "80"
 
   profile:
     build: ./profile
@@ -28,8 +28,9 @@ services:
     build: ./proxy
     environment:
       PORT: "3002"
-      AUTH_SERVICE: "http://auth:3000"
       VIRTUAL_HOST: "proxy.local"
+    links:
+      - auth:auth
     expose:
       - "3002"
     depends_on:
